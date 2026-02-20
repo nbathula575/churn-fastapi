@@ -1,0 +1,250 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Churn Predictor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 820px; margin: 28px auto; padding: 0 14px; }
+    h1 { margin-bottom: 6px; }
+    .sub { color: #555; margin-top: 0; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    label { display:block; font-size: 14px; margin-bottom: 6px; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 10px; }
+    .card { border: 1px solid #eee; padding: 14px; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+    button { padding: 10px 14px; border-radius: 12px; border: 0; cursor: pointer; font-weight: 600; }
+    button:hover { opacity: .92; }
+    .row { margin-top: 12px; display:flex; gap: 10px; align-items:center; }
+    .ok { color: #1a7f37; font-weight: 700; }
+    .bad { color: #b42318; font-weight: 700; }
+    pre { background:#f6f8fa; padding: 12px; border-radius: 12px; overflow:auto; }
+    @media (max-width: 720px){ .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Churn Prediction</h1>
+  <p class="sub">Frontend on GitHub Pages → calls FastAPI on Render</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Customer Inputs</h3>
+
+      <div class="grid">
+        <div>
+          <label>tenure</label>
+          <input id="tenure" type="number" value="12" />
+        </div>
+        <div>
+          <label>MonthlyCharges</label>
+          <input id="MonthlyCharges" type="number" step="0.01" value="70.35" />
+        </div>
+        <div>
+          <label>TotalCharges</label>
+          <input id="TotalCharges" type="number" step="0.01" value="850" />
+        </div>
+        <div>
+          <label>gender</label>
+          <select id="gender">
+            <option>Male</option><option>Female</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Contract</label>
+          <select id="Contract">
+            <option>Month-to-month</option>
+            <option>One year</option>
+            <option>Two year</option>
+          </select>
+        </div>
+
+        <div>
+          <label>PaymentMethod</label>
+          <select id="PaymentMethod">
+            <option>Electronic check</option>
+            <option>Mailed check</option>
+            <option>Bank transfer (automatic)</option>
+            <option>Credit card (automatic)</option>
+          </select>
+        </div>
+
+        <div>
+          <label>InternetService</label>
+          <select id="InternetService">
+            <option>Fiber optic</option>
+            <option>DSL</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <div>
+          <label>PhoneService</label>
+          <select id="PhoneService">
+            <option>Yes</option><option>No</option>
+          </select>
+        </div>
+
+        <div>
+          <label>MultipleLines</label>
+          <select id="MultipleLines">
+            <option>No</option>
+            <option>Yes</option>
+            <option>No phone service</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Partner</label>
+          <select id="Partner"><option>No</option><option>Yes</option></select>
+        </div>
+
+        <div>
+          <label>Dependents</label>
+          <select id="Dependents"><option>No</option><option>Yes</option></select>
+        </div>
+
+        <div>
+          <label>PaperlessBilling</label>
+          <select id="PaperlessBilling"><option>Yes</option><option>No</option></select>
+        </div>
+
+        <div>
+          <label>OnlineSecurity</label>
+          <select id="OnlineSecurity">
+            <option>No</option><option>Yes</option><option>No internet service</option>
+          </select>
+        </div>
+
+        <div>
+          <label>TechSupport</label>
+          <select id="TechSupport">
+            <option>No</option><option>Yes</option><option>No internet service</option>
+          </select>
+        </div>
+
+        <div>
+          <label>OnlineBackup</label>
+          <select id="OnlineBackup">
+            <option>No</option><option>Yes</option><option>No internet service</option>
+          </select>
+        </div>
+
+        <div>
+          <label>DeviceProtection</label>
+          <select id="DeviceProtection">
+            <option>No</option><option>Yes</option><option>No internet service</option>
+          </select>
+        </div>
+
+        <div>
+          <label>StreamingTV</label>
+          <select id="StreamingTV">
+            <option>No</option><option>Yes</option><option>No internet service</option>
+          </select>
+        </div>
+
+        <div>
+          <label>StreamingMovies</label>
+          <select id="StreamingMovies">
+            <option>No</option><option>Yes</option><option>No internet service</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <button onclick="predict()">Predict</button>
+        <span id="status"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Result</h3>
+      <div id="result">No prediction yet.</div>
+      <h4>Raw Response</h4>
+      <pre id="raw">{}</pre>
+      <p class="sub">
+        API: <a id="apiLink" href="#" target="_blank" rel="noreferrer">open</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://churn-fastapi-af07.onrender.com/predict";
+    document.getElementById("apiLink").href = API_URL;
+
+    function v(id) {
+      const el = document.getElementById(id);
+      if (el.type === "number") return Number(el.value);
+      return el.value;
+    }
+
+    async function predict() {
+      const status = document.getElementById("status");
+      const result = document.getElementById("result");
+      const raw = document.getElementById("raw");
+
+      status.textContent = "Calling API...";
+      result.textContent = "";
+      raw.textContent = "{}";
+
+      const payload = {
+        data: {
+          tenure: v("tenure"),
+          MonthlyCharges: v("MonthlyCharges"),
+          TotalCharges: v("TotalCharges"),
+          gender: v("gender"),
+          Contract: v("Contract"),
+          PaymentMethod: v("PaymentMethod"),
+          InternetService: v("InternetService"),
+          PhoneService: v("PhoneService"),
+          MultipleLines: v("MultipleLines"),
+          Partner: v("Partner"),
+          Dependents: v("Dependents"),
+          PaperlessBilling: v("PaperlessBilling"),
+          OnlineSecurity: v("OnlineSecurity"),
+          TechSupport: v("TechSupport"),
+          OnlineBackup: v("OnlineBackup"),
+          DeviceProtection: v("DeviceProtection"),
+          StreamingTV: v("StreamingTV"),
+          StreamingMovies: v("StreamingMovies"),
+        }
+      };
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const text = await res.text();
+        let json;
+        try { json = JSON.parse(text); } catch { json = { raw: text }; }
+
+        raw.textContent = JSON.stringify(json, null, 2);
+
+        if (!res.ok) {
+          status.textContent = "";
+          result.innerHTML = `<span class="bad">Error ${res.status}</span><br/>${json.detail || text}`;
+          return;
+        }
+
+        const prob = (json.churn_probability * 100).toFixed(2);
+        const label = json.churn_prediction === 1 ? "Churn" : "No Churn";
+        const cls = json.churn_prediction === 1 ? "bad" : "ok";
+
+        status.textContent = "";
+        result.innerHTML = `
+          <div class="${cls}">${label}</div>
+          <div><b>Probability:</b> ${prob}%</div>
+          <div><b>Threshold:</b> ${json.threshold_used}</div>
+          <div><b>Model:</b> ${json.model_version || "-"}</div>
+        `;
+      } catch (e) {
+        status.textContent = "";
+        result.innerHTML = `<span class="bad">Network error</span><br/>${e}`;
+      }
+    }
+  </script>
+</body>
+</html>

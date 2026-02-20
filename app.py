@@ -125,3 +125,15 @@ def predict_batch(req: BatchRequest):
 
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+        
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://nbathula575.github.io",  # your GitHub Pages domain
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

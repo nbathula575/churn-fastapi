@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Churn Prediction</title>
+  <title>Varaprasad | ML Engineer Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root{
@@ -17,6 +17,7 @@
       --accent:#60a5fa;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius:16px;
+      --max:1100px;
     }
     *{box-sizing:border-box}
     body{
@@ -29,12 +30,116 @@
     }
     a{color:var(--accent); text-decoration:none}
     a:hover{text-decoration:underline}
-    .container{max-width:1100px; margin:28px auto; padding:0 16px;}
+    .container{max-width:var(--max); margin:22px auto; padding:0 16px;}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .row{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+    .muted{color:var(--muted)}
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding:9px 12px;
+      border-radius:12px;
+      color:var(--text);
+      font-weight:650;
+      text-decoration:none;
+    }
+    .btn.primary{
+      border:0;
+      color:#06111f;
+      background: linear-gradient(180deg, rgba(96,165,250,1), rgba(59,130,246,1));
+    }
+    .btn:hover{opacity:.92; text-decoration:none}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.65);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar .inner{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:10px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .brand{display:flex; flex-direction:column; line-height:1.1}
+    .brand b{font-size:14px; letter-spacing:.2px}
+    .brand span{font-size:12px; color:var(--muted)}
+    nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    nav a{
+      color:var(--muted);
+      border:1px solid transparent;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:13px;
+    }
+    nav a:hover{color:var(--text); border-color:var(--line); text-decoration:none}
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.25fr .9fr;
+      gap:16px;
+      margin-top:16px;
+      align-items:stretch;
+    }
+    h1{margin:0; font-size:34px; letter-spacing:.2px}
+    h2{margin:0 0 10px; font-size:18px}
+    h3{margin:0 0 10px; font-size:15px}
+    .kpis{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+    .kpi{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,.02);
+    }
+    .kpi b{font-size:20px}
+    .kpi div{font-size:12px; color:var(--muted); margin-top:4px}
+
+    .projects{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+    }
+    .proj-meta{
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin:8px 0 12px;
+    }
+    .tag{
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      padding:4px 8px;
+      border-radius:999px;
+    }
+    .proj-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
+    .bullets{margin:10px 0 0; padding-left:18px; color:var(--text)}
+    .bullets li{margin:6px 0}
+    .split{
+      display:grid;
+      grid-template-columns: 1.25fr .9fr;
+      gap:16px;
+      margin-top:16px;
+      align-items:start;
+    }
+
+    /* --- Your existing churn UI styles (kept) --- */
     .header{
       display:flex; justify-content:space-between; align-items:flex-end; gap:12px;
       margin-bottom:14px;
     }
-    h1{margin:0; font-size:34px; letter-spacing:.2px}
     .sub{margin:4px 0 0; color:var(--muted); font-size:14px}
     .pill{
       display:inline-flex; align-items:center; gap:8px;
@@ -44,13 +149,6 @@
     .grid{
       display:grid; grid-template-columns: 1.25fr .9fr;
       gap:16px; align-items:start;
-    }
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow: var(--shadow);
-      padding:16px;
     }
     .card h3{margin:0 0 12px; font-size:16px; color:#f1f5ff}
     .inputs{
@@ -69,10 +167,6 @@
       outline:none;
     }
     input:focus, select:focus{border-color: rgba(96,165,250,.55); box-shadow:0 0 0 3px rgba(96,165,250,.15)}
-    .row{
-      display:flex; flex-wrap:wrap; gap:10px; align-items:center;
-      margin-top:14px;
-    }
     button{
       border:0;
       border-radius:12px;
@@ -113,9 +207,7 @@
       background: rgba(180,35,24,.12);
       color:#ffd7d3;
     }
-
-    /* Result card */
-    .result-wrap{position:sticky; top:16px}
+    .result-wrap{position:sticky; top:72px}
     .big{
       font-size:26px; font-weight:900; margin:4px 0 8px;
       letter-spacing:.2px;
@@ -156,8 +248,6 @@
       overflow:auto;
       max-height: 260px;
     }
-
-    /* Spinner */
     .spinner{
       width:14px; height:14px;
       border:2px solid rgba(255,255,255,.25);
@@ -170,171 +260,351 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    .section{margin-top:16px}
+    .footer{margin:24px 0 40px; color:var(--muted); font-size:12px}
+
     @media (max-width: 920px){
+      .hero{grid-template-columns:1fr}
+      .projects{grid-template-columns:1fr}
+      .split{grid-template-columns:1fr}
       .grid{grid-template-columns:1fr}
       .result-wrap{position:relative; top:auto}
     }
     @media (max-width: 620px){
       .inputs{grid-template-columns:1fr}
       .toggle{margin-left:0}
+      .kpis{grid-template-columns:1fr}
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="header">
-      <div>
-        <h1>Churn Prediction</h1>
-        <p class="sub">GitHub Pages frontend → calls FastAPI on Render</p>
+  <!-- Sticky Nav -->
+  <div class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <b>Varaprasad</b>
+        <span>AI/ML Engineer • Production ML Systems</span>
       </div>
-      <div class="pill">
-        API:
-        <a id="apiLink" href="#" target="_blank" rel="noreferrer">open</a>
+      <nav>
+        <a href="#projects">Projects</a>
+        <a href="#demo">Live Demo</a>
+        <a href="#about">Engineering</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="card">
+        <h1>Varaprasad</h1>
+        <p class="sub"><b>AI/ML Engineer</b> focused on shipping models: validation, serving, monitoring, and reproducible pipelines.</p>
+
+        <div class="row" style="margin-top:12px">
+          <!-- TODO: replace links -->
+          <a class="btn primary" href="TODO_RESUME_LINK" target="_blank" rel="noreferrer">Resume</a>
+          <a class="btn" href="TODO_GITHUB_LINK" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="btn" href="TODO_LINKEDIN_LINK" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="btn" href="mailto:TODO_EMAIL">Email</a>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <b>FastAPI + Docker</b>
+            <div>Model serving & reproducible deploy</div>
+          </div>
+          <div class="kpi">
+            <b>Spark (500k+)</b>
+            <div>Scalable ETL + MLlib training</div>
+          </div>
+        </div>
+
+        <p class="muted" style="margin:12px 0 0; font-size:13px">
+          If you only skim one thing: I build <b>deployable ML systems</b> — not notebooks.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Proof (click)</h2>
+        <div class="row" style="margin-top:8px">
+          <!-- TODO: add your actual artifacts. host images in repo or use raw github URLs -->
+          <a class="btn" href="TODO_CHURN_REPO_FRONTEND" target="_blank" rel="noreferrer">Churn Frontend Repo</a>
+          <a class="btn" href="TODO_CHURN_REPO_BACKEND" target="_blank" rel="noreferrer">Churn Backend Repo</a>
+          <a class="btn" href="#demo">Live Demo ↓</a>
+          <a class="btn" href="TODO_ARCH_DIAGRAM" target="_blank" rel="noreferrer">Architecture Diagram</a>
+          <a class="btn" href="TODO_METRICS" target="_blank" rel="noreferrer">Metrics Screenshot</a>
+        </div>
+        <p class="muted" style="margin:12px 0 0; font-size:13px">
+          Your current page shows a working demo. These links are what turn it into hiring signal.
+        </p>
       </div>
     </div>
 
-    <div class="grid">
-      <!-- Inputs -->
-      <div class="card">
-        <h3>Customer Inputs</h3>
-
-        <div class="inputs">
-          <div>
-            <label>tenure</label>
-            <input id="tenure" type="number" value="10" />
-          </div>
-          <div>
-            <label>MonthlyCharges</label>
-            <input id="MonthlyCharges" type="number" step="0.01" value="34" />
-          </div>
-          <div>
-            <label>TotalCharges</label>
-            <input id="TotalCharges" type="number" step="0.01" value="850" />
-          </div>
-          <div>
-            <label>gender</label>
-            <select id="gender"><option>Male</option><option>Female</option></select>
-          </div>
-
-          <div>
-            <label>Contract</label>
-            <select id="Contract">
-              <option>Month-to-month</option><option>One year</option><option>Two year</option>
-            </select>
-          </div>
-          <div>
-            <label>PaymentMethod</label>
-            <select id="PaymentMethod">
-              <option>Electronic check</option>
-              <option>Mailed check</option>
-              <option>Bank transfer (automatic)</option>
-              <option>Credit card (automatic)</option>
-            </select>
-          </div>
-
-          <div>
-            <label>InternetService</label>
-            <select id="InternetService"><option>Fiber optic</option><option>DSL</option><option>No</option></select>
-          </div>
-          <div>
-            <label>PhoneService</label>
-            <select id="PhoneService"><option>Yes</option><option>No</option></select>
-          </div>
-
-          <div>
-            <label>MultipleLines</label>
-            <select id="MultipleLines"><option>No</option><option>Yes</option><option>No phone service</option></select>
-          </div>
-          <div>
-            <label>Partner</label>
-            <select id="Partner"><option>No</option><option>Yes</option></select>
-          </div>
-
-          <div>
-            <label>Dependents</label>
-            <select id="Dependents"><option>No</option><option>Yes</option></select>
-          </div>
-          <div>
-            <label>PaperlessBilling</label>
-            <select id="PaperlessBilling"><option>Yes</option><option>No</option></select>
-          </div>
-
-          <div>
-            <label>OnlineSecurity</label>
-            <select id="OnlineSecurity"><option>No</option><option>Yes</option><option>No internet service</option></select>
-          </div>
-          <div>
-            <label>TechSupport</label>
-            <select id="TechSupport"><option>No</option><option>Yes</option><option>No internet service</option></select>
-          </div>
-
-          <div>
-            <label>OnlineBackup</label>
-            <select id="OnlineBackup"><option>No</option><option>Yes</option><option>No internet service</option></select>
-          </div>
-          <div>
-            <label>DeviceProtection</label>
-            <select id="DeviceProtection"><option>No</option><option>Yes</option><option>No internet service</option></select>
-          </div>
-
-          <div>
-            <label>StreamingTV</label>
-            <select id="StreamingTV"><option>No</option><option>Yes</option><option>No internet service</option></select>
-          </div>
-          <div>
-            <label>StreamingMovies</label>
-            <select id="StreamingMovies"><option>No</option><option>Yes</option><option>No internet service</option></select>
-          </div>
-        </div>
-
-        <div class="row">
-          <button id="predictBtn" onclick="predict()">Predict</button>
-          <button class="secondary" onclick="loadSample()">Load sample</button>
-          <button class="secondary" onclick="resetForm()">Reset</button>
-
-          <div class="toggle" title="Auto-run prediction when you change inputs">
-            <input id="autoPredict" type="checkbox" checked />
-            <span>Auto predict</span>
-          </div>
-        </div>
-
-        <div id="status" class="status"></div>
-      </div>
-
-      <!-- Results -->
-      <div class="result-wrap">
+    <!-- PROJECTS -->
+    <div id="projects" class="section">
+      <div class="projects">
         <div class="card">
-          <h3>Result</h3>
-
-          <div id="headline" class="big">No prediction yet</div>
-
-          <div class="gauge" aria-label="probability gauge">
-            <div id="bar" class="bar"></div>
+          <h2>Churn Prediction System (End-to-End)</h2>
+          <div class="proj-meta">
+            <span class="tag">FastAPI</span><span class="tag">Render</span><span class="tag">GitHub Pages</span>
+            <span class="tag">Threshold</span><span class="tag">Model Artifacts</span>
           </div>
-          <div class="gauge-label">
-            <span>0%</span>
-            <span id="probText">—</span>
-            <span>100%</span>
+          <p class="muted" style="margin:0 0 10px">
+            Production-style serving pipeline with a live UI calling a deployed API.
+          </p>
+          <ul class="bullets">
+            <li>Serves predictions via REST API and returns probability + threshold decision.</li>
+            <li>Designed for reproducibility (saved pipeline/artifacts) and easy redeploy.</li>
+            <li>Clear separation: frontend (Pages) + backend (FastAPI) + model artifacts.</li>
+          </ul>
+          <div class="proj-actions">
+            <!-- TODO -->
+            <a class="btn primary" href="#demo">Open Live Demo</a>
+            <a class="btn" href="TODO_CHURN_REPO_BACKEND" target="_blank" rel="noreferrer">Backend Repo</a>
+            <a class="btn" href="TODO_CHURN_REPO_FRONTEND" target="_blank" rel="noreferrer">Frontend Repo</a>
           </div>
+        </div>
 
-          <div class="kv">
-            <div>Probability</div><div><b id="probVal">—</b></div>
-            <div>Threshold</div><div><b id="thrVal">—</b></div>
-            <div>Model</div><div><b id="modelVal">—</b></div>
+        <div class="card">
+          <h2>Stock Trend Analysis with Spark</h2>
+          <div class="proj-meta">
+            <span class="tag">PySpark</span><span class="tag">Delta Lake</span><span class="tag">Spark MLlib</span>
+            <span class="tag">Docker</span><span class="tag">ETL</span>
           </div>
+          <p class="muted" style="margin:0 0 10px">
+            Scalable pipeline for processing multi-ticker historical stock data and training MLlib models.
+          </p>
+          <ul class="bullets">
+            <li>Built distributed ETL for feature engineering on 500k+ rows across tickers.</li>
+            <li>Trained and evaluated models with Spark MLlib; tracked validation metrics.</li>
+            <li>Used Delta Lake patterns for reliable storage + incremental processing.</li>
+          </ul>
+          <div class="proj-actions">
+            <!-- TODO -->
+            <a class="btn" href="TODO_STOCK_REPO" target="_blank" rel="noreferrer">Repo</a>
+            <a class="btn" href="TODO_STOCK_README" target="_blank" rel="noreferrer">README / Report</a>
+          </div>
+          <p class="muted" style="margin:10px 0 0; font-size:12px">
+            Tip: add one architecture diagram + one results screenshot. Without that, this won’t land.
+          </p>
+        </div>
 
-          <div class="raw" id="raw">{}</div>
+        <div class="card">
+          <h2>Credit Risk Prediction</h2>
+          <div class="proj-meta">
+            <span class="tag">LogReg</span><span class="tag">Random Forest</span><span class="tag">XGBoost</span>
+            <span class="tag">ROC-AUC</span><span class="tag">Threshold Tuning</span>
+          </div>
+          <p class="muted" style="margin:0 0 10px">
+            Classification system focused on business tradeoffs (precision/recall) rather than only accuracy.
+          </p>
+          <ul class="bullets">
+            <li>Compared multiple models and tuned decision threshold (not default 0.5).</li>
+            <li>Used ROC-AUC + confusion matrix to evaluate risk and false-positive cost.</li>
+            <li>Included feature selection / PCA where it improved generalization.</li>
+          </ul>
+          <div class="proj-actions">
+            <!-- TODO -->
+            <a class="btn" href="TODO_CREDIT_REPO" target="_blank" rel="noreferrer">Repo</a>
+            <a class="btn" href="TODO_CREDIT_REPORT" target="_blank" rel="noreferrer">Report</a>
+          </div>
+        </div>
+
+        <div class="card" id="about">
+          <h2>Engineering Notes (how I think)</h2>
+          <ul class="bullets">
+            <li><b>Offline validation:</b> lock metrics before deployment (ROC-AUC, calibration, slice checks).</li>
+            <li><b>Thresholding:</b> choose based on business cost, not habit.</li>
+            <li><b>Production monitoring:</b> track data drift + prediction drift + latency + error rate.</li>
+            <li><b>Reproducibility:</b> version artifacts + pin dependencies + containerize.</li>
+            <li><b>Failure modes:</b> bad inputs, schema drift, cold start latency, silent data leakage.</li>
+          </ul>
+          <p class="muted" style="margin:10px 0 0; font-size:12px">
+            If you can’t show metrics + monitoring plan, you’re competing with thousands of students. That’s the bar.
+          </p>
         </div>
       </div>
+    </div>
+
+    <!-- LIVE DEMO (your existing churn page) -->
+    <div id="demo" class="section">
+      <div class="header">
+        <div>
+          <h2 style="margin:0">Live Demo: Churn Prediction</h2>
+          <p class="sub">GitHub Pages frontend → calls FastAPI on Render</p>
+        </div>
+        <div class="pill">
+          API:
+          <a id="apiLink" href="#" target="_blank" rel="noreferrer">open</a>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Inputs -->
+        <div class="card">
+          <h3>Customer Inputs</h3>
+
+          <div class="inputs">
+            <div>
+              <label>tenure</label>
+              <input id="tenure" type="number" value="10" />
+            </div>
+            <div>
+              <label>MonthlyCharges</label>
+              <input id="MonthlyCharges" type="number" step="0.01" value="34" />
+            </div>
+            <div>
+              <label>TotalCharges</label>
+              <input id="TotalCharges" type="number" step="0.01" value="850" />
+            </div>
+            <div>
+              <label>gender</label>
+              <select id="gender"><option>Male</option><option>Female</option></select>
+            </div>
+
+            <div>
+              <label>Contract</label>
+              <select id="Contract">
+                <option>Month-to-month</option><option>One year</option><option>Two year</option>
+              </select>
+            </div>
+            <div>
+              <label>PaymentMethod</label>
+              <select id="PaymentMethod">
+                <option>Electronic check</option>
+                <option>Mailed check</option>
+                <option>Bank transfer (automatic)</option>
+                <option>Credit card (automatic)</option>
+              </select>
+            </div>
+
+            <div>
+              <label>InternetService</label>
+              <select id="InternetService"><option>Fiber optic</option><option>DSL</option><option>No</option></select>
+            </div>
+            <div>
+              <label>PhoneService</label>
+              <select id="PhoneService"><option>Yes</option><option>No</option></select>
+            </div>
+
+            <div>
+              <label>MultipleLines</label>
+              <select id="MultipleLines"><option>No</option><option>Yes</option><option>No phone service</option></select>
+            </div>
+            <div>
+              <label>Partner</label>
+              <select id="Partner"><option>No</option><option>Yes</option></select>
+            </div>
+
+            <div>
+              <label>Dependents</label>
+              <select id="Dependents"><option>No</option><option>Yes</option></select>
+            </div>
+            <div>
+              <label>PaperlessBilling</label>
+              <select id="PaperlessBilling"><option>Yes</option><option>No</option></select>
+            </div>
+
+            <div>
+              <label>OnlineSecurity</label>
+              <select id="OnlineSecurity"><option>No</option><option>Yes</option><option>No internet service</option></select>
+            </div>
+            <div>
+              <label>TechSupport</label>
+              <select id="TechSupport"><option>No</option><option>Yes</option><option>No internet service</option></select>
+            </div>
+
+            <div>
+              <label>OnlineBackup</label>
+              <select id="OnlineBackup"><option>No</option><option>Yes</option><option>No internet service</option></select>
+            </div>
+            <div>
+              <label>DeviceProtection</label>
+              <select id="DeviceProtection"><option>No</option><option>Yes</option><option>No internet service</option></select>
+            </div>
+
+            <div>
+              <label>StreamingTV</label>
+              <select id="StreamingTV"><option>No</option><option>Yes</option><option>No internet service</option></select>
+            </div>
+            <div>
+              <label>StreamingMovies</label>
+              <select id="StreamingMovies"><option>No</option><option>Yes</option><option>No internet service</option></select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:14px">
+            <button id="predictBtn" onclick="predict()">Predict</button>
+            <button class="secondary" onclick="loadSample()">Load sample</button>
+            <button class="secondary" onclick="resetForm()">Reset</button>
+
+            <div class="toggle" title="Auto-run prediction when you change inputs">
+              <input id="autoPredict" type="checkbox" checked />
+              <span>Auto predict</span>
+            </div>
+          </div>
+
+          <div id="status" class="status"></div>
+        </div>
+
+        <!-- Results -->
+        <div class="result-wrap">
+          <div class="card">
+            <h3>Result</h3>
+
+            <div id="headline" class="big">No prediction yet</div>
+
+            <div class="gauge" aria-label="probability gauge">
+              <div id="bar" class="bar"></div>
+            </div>
+            <div class="gauge-label">
+              <span>0%</span>
+              <span id="probText">—</span>
+              <span>100%</span>
+            </div>
+
+            <div class="kv">
+              <div>Probability</div><div><b id="probVal">—</b></div>
+              <div>Threshold</div><div><b id="thrVal">—</b></div>
+              <div>Model</div><div><b id="modelVal">—</b></div>
+            </div>
+
+            <div class="raw" id="raw">{}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="contact" class="section">
+      <div class="card">
+        <h2>Contact</h2>
+        <p class="muted" style="margin:0 0 12px">If you’re hiring for AI/ML engineering roles involving production ML, validation, or scalable pipelines, reach out.</p>
+        <div class="row">
+          <!-- TODO -->
+          <a class="btn primary" href="mailto:TODO_EMAIL">Email</a>
+          <a class="btn" href="TODO_LINKEDIN_LINK" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="btn" href="TODO_GITHUB_LINK" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>© <span id="year"></span> Varaprasad • Built with HTML/CSS/JS • Hosted on GitHub Pages</div>
     </div>
   </div>
 
   <script>
+    // ====== CONFIG ======
+    // Keep your existing API URL
     const API_URL = "https://churn-fastapi-af07.onrender.com/predict";
     document.getElementById("apiLink").href = API_URL;
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Elements
+    // ====== Your existing churn JS (kept) ======
     const statusEl = document.getElementById("status");
     const btn = document.getElementById("predictBtn");
     const headline = document.getElementById("headline");
@@ -415,7 +685,6 @@
       headline.className = "big " + (isChurn ? "bad" : "good");
     }
 
-    // Debounce for auto predict
     let timer = null;
     function schedulePredict(){
       if(!autoPredict.checked) return;
@@ -517,7 +786,6 @@
       clearStatus();
     }
 
-    // Make it interactive: predict when inputs change (if auto enabled)
     const ids = [
       "tenure","MonthlyCharges","TotalCharges","gender","Contract","PaymentMethod","InternetService",
       "PhoneService","MultipleLines","Partner","Dependents","PaperlessBilling","OnlineSecurity","TechSupport",
@@ -530,7 +798,6 @@
       el.addEventListener("change", schedulePredict);
     });
 
-    // Run one prediction on page load (optional)
     window.addEventListener("load", () => {
       schedulePredict();
     });
